@@ -37,10 +37,12 @@
             var editor = document.getElementById("editor");
 
             output.innerHTML = "";
+            var logEntry = 0;
             function log(text) {
-                var item = document.createElement("p");
-                item.innerText = text;
+                var item = document.createElement("span");
+                item.innerText = (logEntry++) + ": " + text;
                 output.appendChild(item);
+                output.appendChild(document.createElement("br"));
             }
 
             var parser = new DOMParser();
