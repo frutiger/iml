@@ -3,12 +3,12 @@ var log;
 var API = {
     Container: function() {
         function Container() {
-            log("Creating 'Container'");
+            log("Creating a 'Container'");
             this.children = [];
         }
 
         Container.prototype.addChild = function(child) {
-            log("Adding child to 'Container'");
+            log("Adding a child to 'Container'");
             this.children.push(child);
         };
 
@@ -17,7 +17,7 @@ var API = {
 
     Child: function() {
         function Child() {
-            log("Adding child to 'Child'");
+            log("Creating a 'Child'");
         }
 
         return Child;
