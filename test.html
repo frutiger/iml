@@ -39,11 +39,10 @@
                 output.appendChild(item);
             }
 
-            console.log(editor.value);
             var parser = new DOMParser();
             var doc = parser.parseFromString(editor.value,
                                              "application/xml");
-            if (doc.body && doc.body.firstChild.tagname === "parseerror") {
+            if (doc.body && doc.body.firstChild.tagName === "parsererror") {
                 return;
             }
 
