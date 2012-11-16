@@ -47,6 +47,7 @@
             var doc = parser.parseFromString(editor.value,
                                              "application/xml");
             if (doc.body && doc.body.firstChild.tagName === "parsererror") {
+                output.appendChild(doc.body.firstChild);
                 return;
             }
 
