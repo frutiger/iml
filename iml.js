@@ -1,6 +1,5 @@
 var IML = {
     instantiate: function(node, meta) {
-        console.log(node);
         if (!meta[node.tagName]) {
             return;
         }
