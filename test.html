@@ -1,0 +1,57 @@
+<!doctype html>
+<html>
+    <head>
+        <script src="iml.js"></script>
+        <script src="api.js"></script>
+        <style>
+            #editor {
+                position: absolute;
+                top:      8px;
+                left:     8px;
+                right:    8px;
+                height:   400px;
+            }
+
+            #output {
+                position: absolute;
+                top:      422px;
+                left:     8px;
+                right:    8px;
+                bottom:   8px;
+
+                background-color: #dddddd;
+            }
+        </style>
+    </head>
+    <body>
+        <textarea id="editor">&lt;?xml version="1.0"?&gt;</textarea>
+	<div id="output"></div>
+    </body>
+    <script>
+        var onchange = function() {
+	    var output = document.getElementById("output");
+            var editor = document.getElementById("editor");
+
+            output.innerHTML = "";
+            function log(text) {
+                var item = document.createElement("p");
+                item.innerText = text;
+                output.appendChild(item);
+            }
+
+            console.log(editor.value);
+            var parser = new DOMParser();
+            var doc = parser.parseFromString(editor.value,
+                                             "application/xml");
+            if (doc.body && doc.body.firstChild.tagname === "parseerror") {
+                return;
+            }
+
+            IML.instantiate(doc.firstChild, API.meta(log));
+	};
+
+        document.getElementById("editor").onkeyup  = onchange;
+        document.getElementById("editor").onchange = onchange;
+    </script>
+</html>
+
