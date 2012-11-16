@@ -2,7 +2,7 @@ var log;
 
 var API = {
     Container: function() {
-	function Container() {
+        function Container() {
             log("Creating 'Container'");
             this.children = [];
         }

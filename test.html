@@ -25,11 +25,11 @@
     </head>
     <body>
         <textarea id="editor">&lt;?xml version="1.0"?&gt;</textarea>
-	<div id="output"></div>
+        <div id="output"></div>
     </body>
     <script>
         var onchange = function() {
-	    var output = document.getElementById("output");
+            var output = document.getElementById("output");
             var editor = document.getElementById("editor");
 
             output.innerHTML = "";
@@ -47,7 +47,7 @@
             }
 
             IML.instantiate(doc.firstChild, API.meta(log));
-	};
+        };
 
         document.getElementById("editor").onkeyup  = onchange;
         document.getElementById("editor").onchange = onchange;
