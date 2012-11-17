@@ -35,7 +35,7 @@
         var editor = document.getElementById("editor");
         var output = document.getElementById("output");
 
-        var onchange = function() {
+        var handleChange = function() {
             localStorage.editorContents = editor.value;
 
             output.innerHTML = "";
@@ -69,10 +69,11 @@
         document.body.onload = function() {
             editor.value = localStorage.editorContents ||
                            '<?xml version="1.0"?>\n';
+            handleChange();
         };
 
-        editor.onkeyup  = onchange;
-        editor.onchange = onchange;
+        editor.onkeyup  = handleChange;
+        editor.onchange = handleChange;
     </script>
 </html>
 
