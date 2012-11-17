@@ -38,9 +38,12 @@
         var onchange = function() {
             output.innerHTML = "";
             var logEntry = 0;
-            function log(text) {
+            function log(text, is_error) {
                 var item = document.createElement("span");
                 item.innerText = (logEntry++) + ": " + text;
+                if (is_error) {
+                    item.style.color = "red";
+                }
                 output.appendChild(item);
                 output.appendChild(document.createElement("br"));
             }
@@ -48,12 +51,17 @@
             var parser = new DOMParser();
             var doc = parser.parseFromString(editor.value,
                                              "application/xml");
-            if (doc.body && doc.body.firstChild.tagName === "parsererror") {
-                output.appendChild(doc.body.firstChild);
-                return;
+            try {
+                // Top level errors are contained within doc.body; all other
+                // errors are contained within the particular node. To
+                // gracefully handle this inside the instantiator, the ugly
+                // check is performed here.
+                IML.instantiate((doc.body ? doc.body : doc).firstChild,
+                                API.meta(log));
             }
-
-            IML.instantiate(doc.firstChild, API.meta(log));
+            catch (e) {
+                log(e, true);
+            }
         };
 
         editor.onkeyup  = onchange;

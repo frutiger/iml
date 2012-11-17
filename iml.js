@@ -1,7 +1,11 @@
 var IML = {
     instantiate: function(node, meta) {
+        if (node.tagName === "parsererror") {
+            throw new Error(node.childNodes[1].innerText);
+        }
+
         if (!meta[node.tagName]) {
-            return;
+            throw new Error('"' + node.tagName + '" is not recognized');
         }
 
         var metadata = meta[node.tagName];
