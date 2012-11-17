@@ -62,6 +62,11 @@
             var parser = new DOMParser();
             var doc = parser.parseFromString(editor.value,
                                              'application/xml');
+            if (!doc.childNodes.length) {
+                log('Failed to parse', true);
+                return;
+            }
+
             try {
                 // Top level errors are contained within doc.body; all other
                 // errors are contained within the particular node. To
