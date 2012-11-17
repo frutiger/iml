@@ -13,6 +13,9 @@ function Container(log) {
 Container.id = 0;
 
 Container.prototype.addChild = function(child) {
+    if (!(child instanceof Child)) {
+        throw new Error('Cannot add non-\'Child\' to ' + this);
+    }
     this.log('Adding ' + child + ' to ' + this);
 };
 
