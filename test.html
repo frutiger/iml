@@ -19,6 +19,8 @@
                 right:    8px;
                 bottom:   8px;
 
+                overflow-y: scroll;
+
                 font-family: monospace;
 
                 padding: 8px;
@@ -37,6 +39,9 @@
 
         var handleChange = function() {
             localStorage.editorContents = editor.value;
+
+            var scrolledToBottom = output.scrollHeight === (
+                                        output.scrollTop + output.offsetHeight);
 
             output.innerHTML = "";
             var logEntry = 0;
@@ -63,6 +68,10 @@
             }
             catch (e) {
                 log(e, true);
+            }
+
+            if (scrolledToBottom) {
+                output.scrollTop = output.scrollHeight;
             }
         };
 
