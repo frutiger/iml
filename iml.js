@@ -12,8 +12,8 @@ var IML = {
 
         var object = meta[node.tagName].create();
         for (var i = 0; i < node.childNodes.length; ++i) {
-            meta[node.tagName].child(object,
-            IML.instantiate(node.childNodes[i], meta));
+            var childNode = node.childNodes[i];
+            meta[node.tagName].child(object, IML.instantiate(childNode, meta));
         }
         return object;
     }
