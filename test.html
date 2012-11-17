@@ -34,30 +34,30 @@
         <div id="output"></div>
     </body>
     <script>
-        var editor = document.getElementById("editor");
-        var output = document.getElementById("output");
+        var editor = document.getElementById('editor');
+        var output = document.getElementById('output');
 
         var handleChange = function() {
             localStorage.editorContents = editor.value;
 
             var scrolledToBottom = output.scrollHeight === (
-                                        output.scrollTop + output.offsetHeight);
+                                       output.scrollTop + output.offsetHeight);
 
-            output.innerHTML = "";
+            output.innerHTML = '';
             var logEntry = 0;
             function log(text, is_error) {
-                var item = document.createElement("span");
-                item.innerText = (logEntry++) + ": " + text;
+                var item = document.createElement('span');
+                item.innerText = (logEntry++) + ': ' + text;
                 if (is_error) {
-                    item.style.color = "red";
+                    item.style.color = 'red';
                 }
                 output.appendChild(item);
-                output.appendChild(document.createElement("br"));
+                output.appendChild(document.createElement('br'));
             }
 
             var parser = new DOMParser();
             var doc = parser.parseFromString(editor.value,
-                                             "application/xml");
+                                             'application/xml');
             try {
                 // Top level errors are contained within doc.body; all other
                 // errors are contained within the particular node. To
@@ -77,7 +77,7 @@
 
         document.body.onload = function() {
             editor.value = localStorage.editorContents ||
-                           '<?xml version="1.0"?>\n';
+                           '<?xml version=\'1.0\'?>\n';
             handleChange();
         };
 

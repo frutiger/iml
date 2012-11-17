@@ -7,21 +7,21 @@ var API = {
         function Container() {
             this.id = s_id++;
             this.children = [];
-            log("Creating " + this);
+            log('Creating ' + this);
         }
 
         Container.prototype.addChild = function(child) {
             this.children.push(child);
-            log("Adding " + child + " to " + this);
+            log('Adding ' + child + ' to ' + this);
         };
 
         Container.prototype.toString = function() {
-            return '"Container' + this.id + '"';
+            return '\'Container' + this.id + '\'';
         };
 
-        Object.defineProperty(Container.prototype, "property", {
+        Object.defineProperty(Container.prototype, 'property', {
             set: function(value) {
-                log('Setting "property" on ' + this + ' to ' + value);
+                log('Setting \'property\' on ' + this + ' to ' + value);
                 this.d_property = value;
             },
         });
@@ -34,11 +34,11 @@ var API = {
 
         function Child() {
             this.id = s_id++;
-            log("Creating " + this);
+            log('Creating ' + this);
         }
 
         Child.prototype.toString = function() {
-            return '"Child' + this.id + '"';
+            return '\'Child' + this.id + '\'';
         };
 
         return Child;

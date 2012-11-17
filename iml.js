@@ -1,6 +1,6 @@
 var IML = {
     instantiate: function(node, meta) {
-        if (node.tagName === "parsererror") {
+        if (node.tagName === 'parsererror') {
             throw new Error(node.childNodes[1].innerText);
         }
 
@@ -9,7 +9,7 @@ var IML = {
         }
 
         if (!meta[node.tagName]) {
-            throw new Error('"' + node.tagName + '" is not recognized');
+            throw new Error('\'' + node.tagName + '\' is not recognized');
         }
 
         var metadata = meta[node.tagName];
@@ -18,8 +18,8 @@ var IML = {
         for (var i = 0; i < node.attributes.length; ++i) {
             var attrib = node.attributes[i];
             if (!(attrib.name in object)) {
-                throw new Error('"' + attrib.name
-                             + '" is not a property on "' + node.tagName + '"');
+                throw new Error('\'' + attrib.name
+                         + '\' is not a property on \'' + node.tagName + '\'');
             }
             object[attrib.name] = attrib.value;
         }
@@ -27,7 +27,7 @@ var IML = {
             var childNode = node.childNodes[i];
 
             if (childNode.nodeType === Node.TEXT_NODE &&
-                                     childNode.data.replace(/\s*/, '') === '') {
+                                    childNode.data.replace(/\s*/, '') === '') {
                 continue;
             }
 
