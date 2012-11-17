@@ -36,6 +36,8 @@
         var output = document.getElementById("output");
 
         var onchange = function() {
+            localStorage.editorContents = editor.value;
+
             output.innerHTML = "";
             var logEntry = 0;
             function log(text, is_error) {
@@ -62,6 +64,11 @@
             catch (e) {
                 log(e, true);
             }
+        };
+
+        document.body.onload = function() {
+            editor.value = localStorage.editorContents ||
+                           '<?xml version="1.0"?>\n';
         };
 
         editor.onkeyup  = onchange;
