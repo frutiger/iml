@@ -1,18 +1,17 @@
-var log;
-
 var API = {
     Container: function() {
         var s_id = 0;
 
-        function Container() {
+        function Container(log) {
+            this.log = log;
             this.id = s_id++;
             this.children = [];
-            log('Creating ' + this);
+            this.log('Creating ' + this);
         }
 
         Container.prototype.addChild = function(child) {
             this.children.push(child);
-            log('Adding ' + child + ' to ' + this);
+            this.log('Adding ' + child + ' to ' + this);
         };
 
         Container.prototype.toString = function() {
@@ -21,7 +20,7 @@ var API = {
 
         Object.defineProperty(Container.prototype, 'property', {
             set: function(value) {
-                log('Setting \'property\' on ' + this + ' to ' + value);
+                this.log('Setting \'property\' on ' + this + ' to ' + value);
                 this.d_property = value;
             },
         });
@@ -32,9 +31,10 @@ var API = {
     Child: function() {
         var s_id = 0;
 
-        function Child() {
+        function Child(log) {
+            this.log = log;
             this.id = s_id++;
-            log('Creating ' + this);
+            this.log('Creating ' + this);
         }
 
         Child.prototype.toString = function() {
@@ -44,13 +44,11 @@ var API = {
         return Child;
     }(),
 
-    meta: function(logger) {
-        log = logger;
-
+    meta: function(log) {
         return {
             Container: {
                 create: function() {
-                    return new API.Container();
+                    return new API.Container(log);
                 },
 
                 child: function(self, child) {
@@ -60,7 +58,7 @@ var API = {
 
             Child: {
                 create: function() {
-                    return new API.Child();
+                    return new API.Child(log);
                 },
             },
         };
