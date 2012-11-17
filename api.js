@@ -12,6 +12,18 @@ var API = {
             this.children.push(child);
         };
 
+        Object.defineProperty(Container.prototype, "property", {
+            set: function(value) {
+                log("Setting 'Container.property' to " + value);
+                this.d_property = value;
+            },
+            get: function() {
+                log("Getting 'Container.property'");
+                return this.d_property;
+            },
+            enumerable: true,
+        });
+
         return Container;
     }(),
 
