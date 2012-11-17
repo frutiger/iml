@@ -5,12 +5,10 @@ var API = {
         function Container(log) {
             this.log = log;
             this.id = s_id++;
-            this.children = [];
             this.log('Creating ' + this);
         }
 
         Container.prototype.addChild = function(child) {
-            this.children.push(child);
             this.log('Adding ' + child + ' to ' + this);
         };
 
@@ -21,7 +19,6 @@ var API = {
         Object.defineProperty(Container.prototype, 'property', {
             set: function(value) {
                 this.log('Setting \'property\' on ' + this + ' to ' + value);
-                this.d_property = value;
             },
         });
 
