@@ -32,10 +32,10 @@
         <div id="output"></div>
     </body>
     <script>
-        var onchange = function() {
-            var output = document.getElementById("output");
-            var editor = document.getElementById("editor");
+        var editor = document.getElementById("editor");
+        var output = document.getElementById("output");
 
+        var onchange = function() {
             output.innerHTML = "";
             var logEntry = 0;
             function log(text) {
@@ -56,8 +56,8 @@
             IML.instantiate(doc.firstChild, API.meta(log));
         };
 
-        document.getElementById("editor").onkeyup  = onchange;
-        document.getElementById("editor").onchange = onchange;
+        editor.onkeyup  = onchange;
+        editor.onchange = onchange;
     </script>
 </html>
 
