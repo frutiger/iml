@@ -1,3 +1,9 @@
+// api.js
+
+                                 // =========
+                                 // Container
+                                 // =========
+
 function Container(log) {
     this.log = log;
     this.id = Container.id++;
@@ -20,6 +26,10 @@ Object.defineProperty(Container.prototype, 'property', {
     },
 });
 
+                                   // =====
+                                   // Child
+                                   // =====
+
 function Child(log) {
     this.log = log;
     this.id = Child.id++;
@@ -31,6 +41,10 @@ Child.id = 0;
 Child.prototype.toString = function() {
     return '\'Child' + this.id + '\'';
 };
+
+                                  // ========
+                                  // API.meta
+                                  // ========
 
 var API = {
     meta: function(log) {
