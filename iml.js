@@ -17,6 +17,10 @@ var IML = {
         var object = meta[node.tagName].create();
         for (var i = 0; i < node.attributes.length; ++i) {
             var attrib = node.attributes[i];
+            if (!(attrib.name in object)) {
+                throw new Error('"' + attrib.name
+                             + '" is not a property on "' + node.tagName + '"');
+            }
             object[attrib.name] = attrib.value;
         }
         for (var i = 0; i < node.childNodes.length; ++i) {
