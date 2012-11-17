@@ -37,7 +37,11 @@
         var editor = document.getElementById('editor');
         var output = document.getElementById('output');
 
-        var handleChange = function() {
+        var handleChange = function(forceReload) {
+            if (editor.value === localStorage.editorContents && !forceReload) {
+                return;
+            }
+
             localStorage.editorContents = editor.value;
 
             var scrolledToBottom = output.scrollHeight === (
@@ -78,11 +82,11 @@
         document.body.onload = function() {
             editor.value = localStorage.editorContents ||
                            '<?xml version=\'1.0\'?>\n';
-            handleChange();
+            handleChange(true);
         };
 
-        editor.onkeyup  = handleChange;
-        editor.onchange = handleChange;
+        editor.onkeyup  = function() { handleChange(); };
+        editor.onchange = function() { handleChange(); };
     </script>
 </html>
 
