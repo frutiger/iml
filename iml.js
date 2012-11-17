@@ -15,6 +15,10 @@ var IML = {
         var metadata = meta[node.tagName];
 
         var object = meta[node.tagName].create();
+        for (var i = 0; i < node.attributes.length; ++i) {
+            var attrib = node.attributes[i];
+            object[attrib.name] = attrib.value;
+        }
         for (var i = 0; i < node.childNodes.length; ++i) {
             var childNode = node.childNodes[i];
 
