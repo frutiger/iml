@@ -1,6 +1,7 @@
 <!doctype html>
 <html>
     <head>
+        <script src="logger.js"></script>
         <script src="iml.js"></script>
         <script src="api.js"></script>
         <style>
@@ -19,8 +20,6 @@
                 right:    8px;
                 bottom:   8px;
 
-                overflow-y: scroll;
-
                 font-family: monospace;
 
                 padding: 8px;
@@ -35,35 +34,22 @@
     </body>
     <script>
         var editor = document.getElementById('editor');
-        var output = document.getElementById('output');
+        var logger = new Logger(document.getElementById('output'));
 
         var handleChange = function(forceReload) {
             if (editor.value === localStorage.editorContents && !forceReload) {
                 return;
             }
-
             localStorage.editorContents = editor.value;
 
-            var scrolledToBottom = output.scrollHeight === (
-                                       output.scrollTop + output.offsetHeight);
-
-            output.innerHTML = '';
-            var logEntry = 0;
-            function log(text, is_error) {
-                var item = document.createElement('span');
-                item.innerText = (logEntry++) + ': ' + text;
-                if (is_error) {
-                    item.style.color = 'red';
-                }
-                output.appendChild(item);
-                output.appendChild(document.createElement('br'));
-            }
+            var scrollAnchor = logger.scrollAnchor();
+            logger.clear();
 
             var parser = new DOMParser();
             var doc = parser.parseFromString(editor.value,
                                              'application/xml');
             if (!doc.childNodes.length) {
-                log('Failed to parse', true);
+                logger.error('Failed to parse');
                 return;
             }
 
@@ -73,15 +59,13 @@
                 // gracefully handle this inside the instantiator, the ugly
                 // check is performed here.
                 IML.instantiate((doc.body ? doc.body : doc).firstChild,
-                                API.meta(log));
+                                API.meta(logger.log.bind(logger)));
             }
             catch (e) {
-                log(e, true);
+                logger.error(e);
             }
 
-            if (scrolledToBottom) {
-                output.scrollTop = output.scrollHeight;
-            }
+            logger.scroll(scrollAnchor);
         };
 
         document.body.onload = function() {
