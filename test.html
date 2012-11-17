@@ -81,7 +81,10 @@
 
         document.body.onload = function() {
             editor.value = localStorage.editorContents ||
-                           '<?xml version=\'1.0\'?>\n';
+                           ('<?xml version=\'1.0\'?>\n'                       +
+                            '<Container property=\'foo\'>\n'                  +
+                            '  <Child/>\n'                                    +
+                            '</Container>\n');
             handleChange(true);
         };
 
