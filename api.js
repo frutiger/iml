@@ -13,9 +13,6 @@ function Container(log) {
 Container.id = 0;
 
 Container.prototype.addChild = function(child) {
-    if (!(child instanceof Child)) {
-        throw new Error('Cannot add non-\'Child\' to ' + this);
-    }
     this.log('Adding ' + child + ' to ' + this);
 };
 
@@ -23,9 +20,15 @@ Container.prototype.toString = function() {
     return '\'Container' + this.id + '\'';
 };
 
-Object.defineProperty(Container.prototype, 'property', {
+Object.defineProperty(Container.prototype, 'name', {
     set: function(value) {
-        this.log('Setting \'property\' on ' + this + ' to ' + value);
+        this.log('Setting \'name\' on ' + this + ' to \'' + value + '\'');
+    },
+});
+
+Object.defineProperty(Container.prototype, 'data', {
+    set: function(value) {
+        this.log('Setting \'data\' on ' + this + ' to ' + value);
     },
 });
 
@@ -62,8 +65,25 @@ var API = {
                     return new Container(log);
                 },
 
-                child: function(self, child) {
-                    self.addChild(child);
+                isProperty: function(name) {
+                    return name in {
+                        'name': true,
+                        'data': true,
+                    };
+                },
+
+                canContain: function(name) {
+                    return name in {
+                        'Child': true,
+                    };
+                },
+
+                property: function(name, value) {
+                    this[name] = value;
+                },
+
+                child: function(child) {
+                    this.addChild(child);
                 }
             },
 
