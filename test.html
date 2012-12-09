@@ -50,21 +50,35 @@
             var parser = new DOMParser();
             var doc = parser.parseFromString(editor.value,
                                              'application/xml');
+
             if (!doc.childNodes.length) {
                 logger.error('Failed to parse');
                 return;
             }
 
+            function getParseError(node) {
+                if (node.tagName === 'parsererror') {
+                    return node.childNodes[1].innerText;
+                }
+            }
+
+            if (doc.body && getParseError(doc.body.firstChild)) {
+                logger.error(getParseError(doc.body.firstChild));
+                return;
+            }
+
             try {
-                // Top level errors are contained within doc.body; all other
-                // errors are contained within the particular node. To
-                // gracefully handle this inside the instantiator, the ugly
-                // check is performed here.
-                IML.instantiate((doc.body ? doc.body : doc).firstChild,
-                                API.meta(logger.log.bind(logger)));
+                IML.instantiate(API.meta(logger.log.bind(logger)),
+                                getParseError,
+                                doc.firstChild);
             }
             catch (e) {
-                logger.error(e);
+                if (e instanceof IML.Error) {
+                    logger.error(e.message);
+                }
+                else {
+                    throw e;
+                }
             }
 
             logger.scroll(scrollAnchor);
@@ -72,10 +86,13 @@
 
         document.body.onload = function() {
             editor.value = localStorage.editorContents ||
-                           ('<?xml version=\'1.0\'?>\n'                       +
-                            '<Container property=\'foo\'>\n'                  +
-                            '  <Child/>\n'                                    +
-                            '</Container>\n');
+                           ('<?xml version=\'1.0\'?> \n\
+<Container data=\'42\'>\n\
+    <Child/>\n\
+    <name>  contains whitespace    </name>\n\
+    <Child></Child>\n\
+</Container>\n\
+');
             handleChange(true);
         };
 

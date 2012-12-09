@@ -1,9 +1,80 @@
 // iml.js
 
 var IML = {
-    instantiate: function(node, meta) {
-        if (node.tagName === 'parsererror') {
-            throw new Error(node.childNodes[1].innerText);
+    Error: function (message) {
+        this.message = message;
+    },
+
+    instantiate: function(meta, getParseError, node) {
+        function error(message) {
+            throw new (IML.Error)(message);
+        }
+
+        function simpleData(node) {
+            if (node.nodeType !== Node.ELEMENT_NODE) {
+                return;
+            }
+
+            if (node.childNodes.length !== 1) {
+                return;
+            }
+
+            var childNode = node.firstChild;
+            if (childNode.nodeType !== Node.TEXT_NODE) {
+                return;
+            }
+
+            var text = childNode.data.trim().replace(/\s+/g, ' ');
+
+            if (text !== '') {
+                var number = parseFloat(text);
+                if (!isNaN(number)) {
+                    return number;
+                }
+
+                return text;
+            }
+        }
+
+        function instantiateNodes(metadata, type, object, nodes) {
+            function nodeIsWhitespace(node) {
+                return node.nodeType                === Node.TEXT_NODE &&
+                       node.data.replace(/\s*/, '') === '';
+            }
+
+            for (var i = 0; i < nodes.length; ++i) {
+                var node = nodes[i];
+
+                if (getParseError(node)) {
+                    error(getParseError(node));
+                }
+
+                if (nodeIsWhitespace(node)) {
+                    continue;
+                }
+
+                if (metadata.isProperty(node.tagName)) {
+                    var value = simpleData(node);
+                    if (value === undefined) {
+                        error('Property \'' + node.tagName + '\' does not ' +
+                              'contain any data');
+                    }
+                    metadata.property.bind(object)(node.tagName, value);
+                }
+                else if (metadata.canContain(node.tagName)) {
+                    metadata.child.bind(object)(IML.instantiate(meta,
+                                                                getParseError,
+                                                                node));
+                }
+                else {
+                    error('Object of type \'' + type + '\' cannot handle ' +
+                          'child element with name \'' + node.tagName + '\'');
+                }
+            }
+        }
+
+        if (getParseError(node)) {
+            error(getParseError(node));
         }
 
         if (node.nodeType == Node.TEXT_NODE) {
@@ -11,30 +82,23 @@ var IML = {
         }
 
         if (!meta[node.tagName]) {
-            throw new Error('\'' + node.tagName + '\' is not recognized');
+            error('\'' + node.tagName + '\' is not recognized');
         }
 
         var metadata = meta[node.tagName];
 
-        var object = meta[node.tagName].create();
+        var object = metadata.create();
         for (var i = 0; i < node.attributes.length; ++i) {
             var attrib = node.attributes[i];
-            if (!(attrib.name in object)) {
-                throw new Error('\'' + attrib.name
-                         + '\' is not a property on \'' + node.tagName + '\'');
-            }
-            object[attrib.name] = attrib.value;
-        }
-        for (var i = 0; i < node.childNodes.length; ++i) {
-            var childNode = node.childNodes[i];
 
-            if (childNode.nodeType === Node.TEXT_NODE &&
-                                    childNode.data.replace(/\s*/, '') === '') {
-                continue;
+            if (!metadata.isProperty(attrib.name)) {
+                error('\'' + attrib.name + '\' is not a property on \'' +
+                      node.tagName + '\' objects');
             }
 
-            meta[node.tagName].child(object, IML.instantiate(childNode, meta));
+            metadata.property.bind(object)(attrib.name, attrib.value);
         }
+        instantiateNodes(metadata, node.tagName, object, node.childNodes);
         return object;
     }
 }
