@@ -45,6 +45,8 @@
             var scrollAnchor = logger.scrollAnchor();
             logger.clear();
 
+            API.init();
+
             var parser = new DOMParser();
             var doc = parser.parseFromString(editor.value,
                                              'application/xml');

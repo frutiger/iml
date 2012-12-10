@@ -45,11 +45,16 @@ Child.prototype.toString = function() {
     return '\'Child' + this.id + '\'';
 };
 
-                                  // ========
-                                  // API.meta
-                                  // ========
+                                    // ===
+                                    // API
+                                    // ===
 
 var API = {
+    init: function() {
+        Container.id = 0;
+        Child.id     = 0;
+    },
+
     meta: function(log) {
         return {
             Container: {
@@ -70,3 +75,4 @@ var API = {
         };
     },
 };
+
