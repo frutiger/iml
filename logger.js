@@ -45,5 +45,6 @@ Logger.prototype.log = function(text) {
 Logger.prototype.error = function(text) {
     var item = createLogEntry(this.element, this.entry++, text);
     item.style.color = 'red';
+    item.style.fontWeight = 800;
 };
 
