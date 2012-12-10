@@ -89,14 +89,18 @@
 
         document.body.onload = function() {
             editor.value = localStorage.editorContents ||
-                           ('<?xml version=\'1.0\'?> \n\
-<Container data=\'42\'>\n\
-    <Child/>\n\
-    <name>  contains whitespace    </name>\n\
-    <Child>\n\
-        <Container/>\n\
-    </Child>\n\
-</Container>\n\
+                           ('<?xml version=\'1.0\'?>\n\
+<Window width=\'42\'>\n\
+    <Frame/>\n\
+    <title>   Whitespace gets    stripped</title>\n\
+    <Frame>\n\
+        <Label text=\'bar\'/>\n\
+        <Frame>\n\
+            <Label>foo</Label>\n\
+            <Label><text>baz</text></Label>\n\
+        </Frame>\n\
+    </Frame>\n\
+</Window>\n\
 ');
             handleChange(true);
         };

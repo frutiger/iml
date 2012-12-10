@@ -12,79 +12,104 @@ function Error(message) {
     this.message = message;
 }
 
-                                 // =========
-                                 // Container
-                                 // =========
+                                   // ======
+                                   // Window
+                                   // ======
 
-function Container(log) {
+function Window(log) {
     this.log = log;
-    this.id = Container.id++;
+    this.id = Window.id++;
     this.log('Creating ' + this);
 }
 
-Container.id = 0;
+Window.id = 0;
 
-Container.prototype.addChild = function(child) {
+Window.prototype.addChild = function(child) {
     this.log('Adding ' + child + ' to ' + this);
 };
 
-Container.prototype.toString = function() {
-    return '\'Container' + this.id + '\'';
+Window.prototype.toString = function() {
+    return '\'Window' + this.id + '\'';
 };
 
-Object.defineProperty(Container.prototype, 'name', {
+Object.defineProperty(Window.prototype, 'title', {
     set: function(value) {
-        this.log('Setting \'name\' on ' + this + ' to \'' + value + '\'');
+        this.log('Setting \'title\' on ' + this + ' to \'' + value + '\'');
     },
 });
 
-Object.defineProperty(Container.prototype, 'data', {
+Object.defineProperty(Window.prototype, 'width', {
     set: function(value) {
-        this.log('Setting \'data\' on ' + this + ' to ' + value);
+        this.log('Setting \'width\' on ' + this + ' to ' + value);
     },
 });
 
                                    // =====
-                                   // Child
+                                   // Frame
                                    // =====
 
-function Child(log) {
+function Frame(log) {
     this.log = log;
-    this.id = Child.id++;
+    this.id = Frame.id++;
     this.log('Creating ' + this);
 }
 
-Child.id = 0;
+Frame.id = 0;
 
-Child.prototype.toString = function() {
-    return '\'Child' + this.id + '\'';
+Frame.prototype.toString = function() {
+    return '\'Frame' + this.id + '\'';
 };
 
-Child.prototype.addChild = function(child) {
+Frame.prototype.addChild = function(child) {
     this.log('Adding ' + child + ' to ' + this);
 };
+
+                                   // =====
+                                   // Label
+                                   // =====
+
+function Label(log) {
+    this.log = log;
+    this.id = Label.id++;
+    this.log('Creating ' + this);
+}
+
+Label.id = 0;
+
+Label.prototype.toString = function() {
+    return '\'Label' + this.id + '\'';
+};
+
+Object.defineProperty(Label.prototype, 'text', {
+    set: function(value) {
+        this.log('Setting \'text\' on ' + this + ' to \'' + value + '\'');
+    },
+});
 
                                     // ===
                                     // API
                                     // ===
 
 API = {
+    Error: Error,
+
     init: function() {
-        Container.id = 0;
-        Child.id     = 0;
+        Window.id = 0;
+        Frame.id  = 0;
+        Label.id  = 0;
     },
 
     meta: function(log) {
         return {
-            Container: {
+            Window: {
                 create: function() {
-                    return new Container(log);
+                    return new Window(log);
                 },
 
                 isProperty: function(name) {
                     return name in {
-                        'name': true,
-                        'data': true,
+                        'title': true,
+                        'width': true,
                     };
                 },
 
@@ -93,25 +118,45 @@ API = {
                 },
 
                 child: function(child) {
-                    if (!(child instanceof Child)) {
-                        throw new Error('Container can only hold Child ' +
-                                        'objects');
+                    if (!(child instanceof Frame)) {
+                        throw new Error('Window can only contain Frames');
                     }
                     this.addChild(child);
                 },
             },
 
-            Child: {
+            Frame: {
                 create: function() {
-                    return new Child(log);
+                    return new Frame(log);
                 },
 
                 child: function(child) {
-                    if (!(child instanceof Container)) {
-                        throw new Error('Child can only hold Container ' +
-                                        'objects');
+                    if (!(child instanceof Frame) &&
+                        !(child instanceof Label)) {
+                        throw new Error('Frame can only contain Frames and ' +
+                                         'Labels');
                     }
                     this.addChild(child);
+                },
+            },
+
+            Label: {
+                create: function() {
+                    return new Label(log);
+                },
+
+                isProperty: function(name) {
+                    return name in {
+                        'text': true,
+                    };
+                },
+
+                property: function(name, value) {
+                    this[name] = value;
+                },
+
+                child: function(text) {
+                    this.text = text.toString();
                 },
             },
         };
