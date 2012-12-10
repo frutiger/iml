@@ -53,7 +53,7 @@ var IML = {
                     continue;
                 }
 
-                if (metadata.isProperty(node.tagName)) {
+                if (metadata.isProperty && metadata.isProperty(node.tagName)) {
                     var value = simpleData(node);
                     if (value === undefined) {
                         error('Property \'' + node.tagName + '\' does not ' +
@@ -61,7 +61,8 @@ var IML = {
                     }
                     metadata.property.bind(object)(node.tagName, value);
                 }
-                else if (metadata.canContain(node.tagName)) {
+                else if (metadata.canContain &&
+                         metadata.canContain(node.tagName)) {
                     metadata.child.bind(object)(IML.instantiate(meta,
                                                                 getParseError,
                                                                 node));
@@ -91,6 +92,10 @@ var IML = {
         for (var i = 0; i < node.attributes.length; ++i) {
             var attrib = node.attributes[i];
 
+            if (!metadata.isProperty) {
+                error('\'' + node.tagName + '\' does not declare any ' +
+                      'properties and so cannot have any attributes');
+            }
             if (!metadata.isProperty(attrib.name)) {
                 error('\'' + attrib.name + '\' is not a property on \'' +
                       node.tagName + '\' objects');
