@@ -76,6 +76,9 @@
                 if (e instanceof IML.Error) {
                     logger.error(e.message);
                 }
+                else if (e instanceof API.Error) {
+                    logger.error(e.message);
+                }
                 else {
                     throw e;
                 }

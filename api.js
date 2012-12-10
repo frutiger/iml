@@ -1,5 +1,17 @@
 // api.js
 
+var API;
+
+(function() {
+
+                                   // =====
+                                   // Error
+                                   // =====
+
+function Error(message) {
+    this.message = message;
+}
+
                                  // =========
                                  // Container
                                  // =========
@@ -56,7 +68,7 @@ Child.prototype.addChild = function(child) {
                                     // API
                                     // ===
 
-var API = {
+API = {
     init: function() {
         Container.id = 0;
         Child.id     = 0;
@@ -105,4 +117,6 @@ var API = {
         };
     },
 };
+
+})();
 
