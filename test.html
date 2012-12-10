@@ -90,7 +90,9 @@
 <Container data=\'42\'>\n\
     <Child/>\n\
     <name>  contains whitespace    </name>\n\
-    <Child></Child>\n\
+    <Child>\n\
+        <Container/>\n\
+    </Child>\n\
 </Container>\n\
 ');
             handleChange(true);
