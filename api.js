@@ -16,13 +16,13 @@ function Error(message) {
                                    // Window
                                    // ======
 
+Window.id = 0;
+
 function Window(log) {
     this.log = log;
     this.id = Window.id++;
     this.log('Creating ' + this);
 }
-
-Window.id = 0;
 
 Window.prototype.addChild = function(child) {
     this.log('Adding ' + child + ' to ' + this);
@@ -48,13 +48,13 @@ Object.defineProperty(Window.prototype, 'width', {
                                    // Frame
                                    // =====
 
+Frame.id = 0;
+
 function Frame(log) {
     this.log = log;
     this.id = Frame.id++;
     this.log('Creating ' + this);
 }
-
-Frame.id = 0;
 
 Frame.prototype.toString = function() {
     return '\'Frame' + this.id + '\'';
@@ -68,13 +68,13 @@ Frame.prototype.addChild = function(child) {
                                    // Label
                                    // =====
 
+Label.id = 0;
+
 function Label(log) {
     this.log = log;
     this.id = Label.id++;
     this.log('Creating ' + this);
 }
-
-Label.id = 0;
 
 Label.prototype.toString = function() {
     return '\'Label' + this.id + '\'';
