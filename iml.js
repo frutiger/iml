@@ -61,15 +61,10 @@ var IML = {
                     }
                     metadata.property.bind(object)(node.tagName, value);
                 }
-                else if (metadata.canContain &&
-                         metadata.canContain(node.tagName)) {
+                else {
                     metadata.child.bind(object)(IML.instantiate(meta,
                                                                 getParseError,
                                                                 node));
-                }
-                else {
-                    error('Object of type \'' + type + '\' cannot handle ' +
-                          'child element with name \'' + node.tagName + '\'');
                 }
             }
         }

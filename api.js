@@ -76,17 +76,15 @@ var API = {
                     };
                 },
 
-                canContain: function(name) {
-                    return name in {
-                        'Child': true,
-                    };
-                },
-
                 property: function(name, value) {
                     this[name] = value;
                 },
 
                 child: function(child) {
+                    if (!(child instanceof Child)) {
+                        throw new Error('Container can only hold Child ' +
+                                        'objects');
+                    }
                     this.addChild(child);
                 },
             },
@@ -96,13 +94,11 @@ var API = {
                     return new Child(log);
                 },
 
-                canContain: function(name) {
-                    return name in {
-                        'Container': true,
-                    };
-                },
-
                 child: function(child) {
+                    if (!(child instanceof Container)) {
+                        throw new Error('Child can only hold Container ' +
+                                        'objects');
+                    }
                     this.addChild(child);
                 },
             },
