@@ -48,6 +48,10 @@ Child.prototype.toString = function() {
     return '\'Child' + this.id + '\'';
 };
 
+Child.prototype.addChild = function(child) {
+    this.log('Adding ' + child + ' to ' + this);
+};
+
                                     // ===
                                     // API
                                     // ===
@@ -84,12 +88,22 @@ var API = {
 
                 child: function(child) {
                     this.addChild(child);
-                }
+                },
             },
 
             Child: {
                 create: function() {
                     return new Child(log);
+                },
+
+                canContain: function(name) {
+                    return name in {
+                        'Container': true,
+                    };
+                },
+
+                child: function(child) {
+                    this.addChild(child);
                 },
             },
         };
