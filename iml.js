@@ -101,5 +101,5 @@ var IML = {
         instantiateNodes(metadata, node.tagName, object, node.childNodes);
         return object;
     }
-}
+};
 
