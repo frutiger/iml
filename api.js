@@ -1,8 +1,6 @@
 // api.js
 
-var API;
-
-(function() {
+var API = (function() {
 
                                    // =====
                                    // Error
@@ -90,7 +88,7 @@ Object.defineProperty(Label.prototype, 'text', {
                                     // API
                                     // ===
 
-API = {
+return {
     Error: Error,
 
     init: function() {

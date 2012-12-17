@@ -1,5 +1,7 @@
 // logger.js
 
+var Logger = (function() {
+
                                    // ======
                                    // Logger
                                    // ======
@@ -48,3 +50,6 @@ Logger.prototype.error = function(text) {
     item.style.fontWeight = 800;
 };
 
+return Logger;
+
+}());
