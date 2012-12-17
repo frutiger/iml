@@ -132,7 +132,7 @@ return {
                     if (!(child instanceof Frame) &&
                         !(child instanceof Label)) {
                         throw new Error('Frame can only contain Frames and ' +
-                                         'Labels');
+                                        'Labels');
                     }
                     this.addChild(child);
                 },
