@@ -1,7 +1,7 @@
 // iml.js
 
 var IML = {
-    Error: function (message) {
+    Error: function(message) {
         this.message = message;
     },
 
