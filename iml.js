@@ -57,7 +57,7 @@ var IML = {
                     var value = simpleData(node);
                     if (value === undefined) {
                         error('Property \'' + node.tagName + '\' does not ' +
-                              'contain any data');
+                              'contain simple data');
                     }
                     metadata.property.bind(object)(node.tagName, value);
                 }
