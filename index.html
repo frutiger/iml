@@ -1,0 +1,112 @@
+<!doctype html>
+<html>
+    <head>
+        <script src="logger.js"></script>
+        <script src="iml.js"></script>
+        <script src="api.js"></script>
+        <style>
+            #editor {
+                position:    absolute;
+                top:         8px;
+                left:        8px;
+                right:       8px;
+                height:      400px;
+
+                font-family: monospace;
+            }
+
+            #output {
+                position: absolute;
+                top:      422px;
+                left:     8px;
+                right:    8px;
+                bottom:   8px;
+
+                font-family: monospace;
+
+                padding: 8px;
+
+                background-color: #dddddd;
+            }
+        </style>
+    </head>
+    <body>
+        <textarea id="editor">&lt;?xml version="1.0"?&gt;</textarea>
+        <div id="output"></div>
+    </body>
+    <script>
+        var editor = document.getElementById('editor');
+        var logger = new Logger(document.getElementById('output'));
+
+        var handleChange = function(forceReload) {
+            if (editor.value === localStorage.editorContents && !forceReload) {
+                return;
+            }
+            localStorage.editorContents = editor.value;
+
+            var scrollAnchor = logger.scrollAnchor();
+            logger.clear();
+
+            API.init();
+
+            var parser = new DOMParser();
+            var doc = parser.parseFromString(editor.value,
+                                             'application/xml');
+
+            if (!doc.childNodes.length) {
+                logger.error('Failed to parse');
+                return;
+            }
+
+            function getParseError(node) {
+                if (node.tagName === 'parsererror') {
+                    return node.childNodes[1].innerText;
+                }
+            }
+
+            if (doc.body && getParseError(doc.body.firstChild)) {
+                logger.error(getParseError(doc.body.firstChild));
+                return;
+            }
+
+            try {
+                IML.instantiate(API.meta(logger.log.bind(logger)),
+                                getParseError,
+                                doc.firstChild);
+            }
+            catch (e) {
+                if (e instanceof IML.Error ||
+                    e instanceof API.Error) {
+                    logger.error(e.message);
+                }
+                else {
+                    throw e;
+                }
+            }
+
+            logger.scroll(scrollAnchor);
+        };
+
+        document.body.onload = function() {
+            editor.value = localStorage.editorContents ||
+                           ('<?xml version=\'1.0\'?>\n\
+<Window width=\'42\'>\n\
+    <Frame/>\n\
+    <title>   Whitespace gets    stripped</title>\n\
+    <Frame>\n\
+        <Label text=\'bar\'/>\n\
+        <Frame>\n\
+            <Label>foo</Label>\n\
+            <Label><text>baz</text></Label>\n\
+        </Frame>\n\
+    </Frame>\n\
+</Window>\n\
+');
+            handleChange(true);
+        };
+
+        editor.onkeyup  = function() { handleChange(); };
+        editor.onchange = function() { handleChange(); };
+    </script>
+</html>
+
